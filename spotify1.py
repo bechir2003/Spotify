@@ -15,8 +15,6 @@ load_dotenv()
 
 SPOTIPY_CLIENT_ID = os.getenv("SPOTIPY_CLIENT_ID")
 SPOTIPY_CLIENT_SECRET = os.getenv("SPOTIPY_CLIENT_SECRET")
-# Ask the user for the redirect URI
-SPOTIPY_REDIRECT_URI = input("Enter your Spotify redirect URI: ").strip()
 YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
 
 SCOPE = "user-library-read"
@@ -45,7 +43,23 @@ def get_spotify_client():
         sp_oauth.cache_handler.save_token_to_cache(token_info)
     return spotipy.Spotify(auth=token_info['access_token'])
 
-@app.route('/')
+# ===================== NEW ROUTES FOR SETTING REDIRECT URI =====================
+@app.route("/", methods=["GET"])
+def index():
+    # Show form to set the redirect URI
+    return render_template("set_redirect_uri.html")
+
+@app.route("/set-uri", methods=["POST"])
+def set_uri():
+    global SPOTIPY_REDIRECT_URI
+    SPOTIPY_REDIRECT_URI = request.form.get("redirect_uri")
+    if not SPOTIPY_REDIRECT_URI:
+        return "Redirect URI cannot be empty.", 400
+
+    return redirect("/login")
+
+
+@app.route('/login')
 def login():
     redirect_type = request.args.get('redirect', 'web')
     session['post_auth_redirect'] = redirect_type
