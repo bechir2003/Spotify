@@ -15,7 +15,8 @@ load_dotenv()
 
 SPOTIPY_CLIENT_ID = os.getenv("SPOTIPY_CLIENT_ID")
 SPOTIPY_CLIENT_SECRET = os.getenv("SPOTIPY_CLIENT_SECRET")
-SPOTIPY_REDIRECT_URI = os.getenv("SPOTIPY_REDIRECT_URI")
+# Ask the user for the redirect URI
+SPOTIPY_REDIRECT_URI = input("Enter your Spotify redirect URI: ").strip()
 YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
 
 SCOPE = "user-library-read"
