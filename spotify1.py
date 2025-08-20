@@ -15,6 +15,7 @@ load_dotenv()
 
 SPOTIPY_CLIENT_ID = os.getenv("SPOTIPY_CLIENT_ID")
 SPOTIPY_CLIENT_SECRET = os.getenv("SPOTIPY_CLIENT_SECRET")
+SPOTIPY_REDIRECT_URI = os.getenv("SPOTIPY_REDIRECT_URI")
 YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
 
 SCOPE = "user-library-read"
@@ -43,23 +44,7 @@ def get_spotify_client():
         sp_oauth.cache_handler.save_token_to_cache(token_info)
     return spotipy.Spotify(auth=token_info['access_token'])
 
-# ===================== NEW ROUTES FOR SETTING REDIRECT URI =====================
-@app.route("/", methods=["GET"])
-def index():
-    # Show form to set the redirect URI
-    return render_template("set_redirect_uri.html")
-
-@app.route("/set-uri", methods=["POST"])
-def set_uri():
-    global SPOTIPY_REDIRECT_URI
-    SPOTIPY_REDIRECT_URI = request.form.get("redirect_uri")
-    if not SPOTIPY_REDIRECT_URI:
-        return "Redirect URI cannot be empty.", 400
-
-    return redirect("/login")
-
-
-@app.route('/login')
+@app.route('/')
 def login():
     redirect_type = request.args.get('redirect', 'web')
     session['post_auth_redirect'] = redirect_type
@@ -90,7 +75,7 @@ def callback():
     redirect_type = session.pop('post_auth_redirect', 'web')
     if redirect_type == 'app':
         # Pass the access token to the app via deep link
-        return redirect(f'spotify://callback?access_token={token_info["access_token"]}')
+        return redirect(f'spotify1://callback?access_token={token_info["access_token"]}')
     else:
         return redirect('/player')
 
