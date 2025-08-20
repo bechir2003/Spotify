@@ -163,7 +163,7 @@ def youtube_audio():
         'format': 'bestaudio/best',
         'quiet': True,
         'noplaylist': True,
-        'cookies_from_browser': ('chrome',)
+        'cookiefile': 'cookies.txt'
     }
 
     try:
