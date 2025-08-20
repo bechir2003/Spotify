@@ -90,7 +90,7 @@ def callback():
     redirect_type = session.pop('post_auth_redirect', 'web')
     if redirect_type == 'app':
         # Pass the access token to the app via deep link
-        return redirect(f'spotify://callback?access_token={token_info["access_token"]}')
+        return redirect(f'spotify1://callback?access_token={token_info["access_token"]}')
     else:
         return redirect('/player')
 
